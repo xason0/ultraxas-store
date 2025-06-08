@@ -1,0 +1,274 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+    --font-size: 16px;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.5% 48%;
+  }
+
+  .black {
+    --background: 0 0% 0%;
+    --foreground: 210 40% 98%;
+    --card: 0 0% 3%;
+    --card-foreground: 210 40% 98%;
+    --popover: 0 0% 3%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 0 0% 12%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 224.3 76.5% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-size: var(--font-size);
+  }
+}
+
+/* Google colors */
+:root {
+  --google-blue: #4285f4;
+  --google-red: #ea4335;
+  --google-yellow: #fbbc05;
+  --google-green: #34a853;
+}
+
+.text-google-blue {
+  color: var(--google-blue);
+}
+
+.text-google-red {
+  color: var(--google-red);
+}
+
+.text-google-yellow {
+  color: var(--google-yellow);
+}
+
+.text-google-green {
+  color: var(--google-green);
+}
+
+.from-google-blue {
+  --tw-gradient-from: var(--google-blue) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(66 133 244 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.via-google-red {
+  --tw-gradient-to: rgb(234 67 53 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--google-red) var(--tw-gradient-via-position), var(--tw-gradient-to);
+}
+
+.via-google-yellow {
+  --tw-gradient-to: rgb(251 188 5 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--google-yellow) var(--tw-gradient-via-position),
+    var(--tw-gradient-to);
+}
+
+.to-google-green {
+  --tw-gradient-to: var(--google-green) var(--tw-gradient-to-position);
+}
+
+/* Pride gradient */
+.pride-gradient {
+  background: linear-gradient(to right, #ff0018, #ffa52c, #ffff41, #008018, #0000f9, #86007d);
+}
+
+/* Animated logo */
+.animated-logo {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.animated-logo span {
+  display: inline-block;
+  animation: bounce 2s infinite alternate;
+}
+
+.animated-logo span:nth-child(1) {
+  animation-delay: 0.0s;
+}
+.animated-logo span:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.animated-logo span:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.animated-logo span:nth-child(4) {
+  animation-delay: 0.3s;
+}
+.animated-logo span:nth-child(5) {
+  animation-delay: 0.4s;
+}
+.animated-logo span:nth-child(6) {
+  animation-delay: 0.5s;
+}
+.animated-logo span:nth-child(7) {
+  animation-delay: 0.6s;
+}
+.animated-logo span:nth-child(8) {
+  animation-delay: 0.7s;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+  20% {
+    transform: translateY(-2px);
+  }
+  40% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Banner gradient */
+.banner-gradient {
+  background: linear-gradient(
+    135deg,
+    rgba(66, 133, 244, 0.1),
+    rgba(234, 67, 53, 0.1),
+    rgba(251, 188, 5, 0.1),
+    rgba(52, 168, 83, 0.1)
+  );
+  animation: gradientShift 10s ease infinite;
+  background-size: 400% 400%;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Hide scrollbar but allow scrolling */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+/* Buy Me a Coffee Button Styles */
+.bmc-container {
+  position: relative;
+  z-index: 40;
+}
+
+/* Countdown animation for Buy Me a Coffee button */
+@keyframes countdown {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+/* Ensure the BMC button is properly styled */
+.bmc-button {
+  line-height: 36px !important;
+  height: 37px !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 25px !important;
+  font-family: "Cookie", cursive !important;
+  font-size: 16px !important;
+  letter-spacing: 0.6px !important;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15) !important;
+  transition: all 0.3s ease !important;
+  margin: 0 !important;
+  padding: 0 15px !important;
+  min-width: 150px !important;
+}
+
+.bmc-button:hover {
+  transform: scale(1.05) !important;
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Fallback button styling */
+.bmc-fallback a {
+  font-family: "Cookie", cursive;
+  font-size: 16px;
+  letter-spacing: 0.6px;
+  min-width: 150px;
+  justify-content: center;
+}
+
+/* Loading state */
+.bmc-container:empty + .bmc-fallback {
+  display: block;
+}
