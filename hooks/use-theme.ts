@@ -1,44 +1,46 @@
+"use client"
+
 import { useState, useEffect } from "react"
 
 type Theme = "light" | "dark" | "black" | "system"
 
 export function useTheme() {
   const [theme, setTheme] = useState<Theme>("system")
-  
+  const [mounted, setMounted] = useState(false)
+
   useEffect(() => {
+    setMounted(true)
     const storedTheme = localStorage.getItem("theme") as Theme | null
     if (storedTheme) {
       setTheme(storedTheme)
-      if (storedTheme === "system") {
-        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
-        document.documentElement.classList.remove("light", "dark", "black")
-        document.documentElement.classList.add(systemTheme)
-      } else {
-        document.documentElement.classList.remove("light", "dark", "black")
-        document.documentElement.classList.add(storedTheme)
-      }
+      applyTheme(storedTheme)
     } else {
       // Default to black theme for AMOLED
       setTheme("black")
-      document.documentElement.classList.remove("light", "dark")
-      document.documentElement.classList.add("black")
+      applyTheme("black")
       localStorage.setItem("theme", "black")
     }
   }, [])
 
-  const setThemeValue = (newTheme: Theme) => {
-    localStorage.setItem("theme", newTheme)
-    setTheme(newTheme)
-    
+  const applyTheme = (newTheme: Theme) => {
+    const root = document.documentElement
+    root.classList.remove("light", "dark", "black")
+
     if (newTheme === "system") {
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
-      document.documentElement.classList.remove("light", "dark", "black")
-      document.documentElement.classList.add(systemTheme)
+      root.classList.add(systemTheme)
     } else {
-      document.documentElement.classList.remove("light", "dark", "black")
-      document.documentElement.classList.add(newTheme)
+      root.classList.add(newTheme)
     }
   }
 
-  return { theme, setTheme: setThemeValue }
+  const setThemeValue = (newTheme: Theme) => {
+    if (!mounted) return
+
+    localStorage.setItem("theme", newTheme)
+    setTheme(newTheme)
+    applyTheme(newTheme)
+  }
+
+  return { theme, setTheme: setThemeValue, mounted }
 }

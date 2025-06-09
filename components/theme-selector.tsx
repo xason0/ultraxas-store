@@ -1,54 +1,78 @@
 "use client"
 
-import { useState } from "react"
-import { Moon, Sun, Laptop } from "lucide-react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { useTheme } from "@/hooks/use-theme"
+import { Moon, Sun, Monitor } from "lucide-react"
 
 export function ThemeSelector() {
-  const { theme, setTheme } = useTheme()
-  const [isOpen, setIsOpen] = useState(false)
+  const [theme, setTheme] = useState<"light" | "dark" | "black" | "system">("system")
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    const storedTheme = localStorage.getItem("theme") as "light" | "dark" | "black" | "system" | null
+    if (storedTheme) {
+      setTheme(storedTheme)
+    }
+  }, [])
 
   const handleThemeChange = (newTheme: "light" | "dark" | "black" | "system") => {
     setTheme(newTheme)
-    setIsOpen(false)
+    localStorage.setItem("theme", newTheme)
+
+    const root = document.documentElement
+    root.classList.remove("light", "dark", "black")
+
+    if (newTheme === "system") {
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+      root.classList.add(systemTheme)
+    } else {
+      root.classList.add(newTheme)
+    }
+  }
+
+  if (!mounted) {
+    return null
   }
 
   return (
-    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-9 w-9 rounded-md">
-          {theme === "light" && <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all" />}
-          {theme === "dark" && <Moon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all" />}
-          {theme === "black" && (
-            <Moon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all text-gray-400" />
-          )}
-          {theme === "system" && <Laptop className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all" />}
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => handleThemeChange("light")} className="cursor-pointer">
-          <Sun className="mr-2 h-4 w-4" />
-          <span>Light</span>
-          {theme === "light" && <span className="ml-auto">✓</span>}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleThemeChange("dark")} className="cursor-pointer">
-          <Moon className="mr-2 h-4 w-4" />
-          <span>Dark</span>
-          {theme === "dark" && <span className="ml-auto">✓</span>}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleThemeChange("black")} className="cursor-pointer">
-          <Moon className="mr-2 h-4 w-4 text-gray-400" />
-          <span>AMOLED Black</span>
-          {theme === "black" && <span className="ml-auto">✓</span>}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleThemeChange("system")} className="cursor-pointer">
-          <Laptop className="mr-2 h-4 w-4" />
-          <span>System</span>
-          {theme === "system" && <span className="ml-auto">✓</span>}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="flex flex-wrap gap-2">
+      <Button
+        variant={theme === "light" ? "default" : "outline"}
+        size="sm"
+        onClick={() => handleThemeChange("light")}
+        className="flex-1"
+      >
+        <Sun className="h-4 w-4 mr-2" />
+        Light
+      </Button>
+      <Button
+        variant={theme === "dark" ? "default" : "outline"}
+        size="sm"
+        onClick={() => handleThemeChange("dark")}
+        className="flex-1"
+      >
+        <Moon className="h-4 w-4 mr-2" />
+        Dark
+      </Button>
+      <Button
+        variant={theme === "black" ? "default" : "outline"}
+        size="sm"
+        onClick={() => handleThemeChange("black")}
+        className="flex-1"
+      >
+        <Moon className="h-4 w-4 mr-2" />
+        Black
+      </Button>
+      <Button
+        variant={theme === "system" ? "default" : "outline"}
+        size="sm"
+        onClick={() => handleThemeChange("system")}
+        className="flex-1"
+      >
+        <Monitor className="h-4 w-4 mr-2" />
+        System
+      </Button>
+    </div>
   )
 }

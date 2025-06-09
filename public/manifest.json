@@ -1,18 +1,59 @@
 {
-  "name": "UltraXas Store",
-  "short_name": "UltraXas",
-  "description": "Private app distribution for the UltraXas Dev team",
+  "name": "UltraXas Store - Private App Store",
+  "short_name": "UltraXas Store",
+  "description": "Private app distribution for the UltraXas Dev team. Install and manage apps securely.",
   "start_url": "/",
   "display": "standalone",
+  "display_override": ["standalone", "fullscreen"],
   "background_color": "#000000",
   "theme_color": "#000000",
-  "orientation": "portrait",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "id": "ultraxas-store",
+  "lang": "en",
+  "dir": "ltr",
   "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "/icons/icon-512x512.png",
@@ -21,31 +62,73 @@
       "purpose": "any maskable"
     }
   ],
-  "related_applications": [],
-  "prefer_related_applications": false,
   "shortcuts": [
     {
-      "name": "Apps",
+      "name": "Browse Apps",
+      "short_name": "Apps",
+      "description": "Browse all available apps",
       "url": "/apps",
-      "description": "Browse all apps"
+      "icons": [
+        {
+          "src": "/icons/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
-      "name": "Games",
+      "name": "Browse Games",
+      "short_name": "Games",
+      "description": "Browse all available games",
       "url": "/games",
-      "description": "Browse all games"
+      "icons": [
+        {
+          "src": "/icons/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
-      "name": "Settings",
-      "url": "/settings",
-      "description": "Manage app settings"
+      "name": "Upload APK",
+      "short_name": "Upload",
+      "description": "Upload new APK files",
+      "url": "/upload",
+      "icons": [
+        {
+          "src": "/icons/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ],
-  "categories": ["utilities", "productivity"],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "categories": ["utilities", "productivity", "developer"],
   "screenshots": [
     {
       "src": "/mobile-screenshot.png",
       "sizes": "1080x1920",
-      "type": "image/png"
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/header-screenshot.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "capture_links": "existing-client-navigate",
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": ["navigate-existing", "auto"]
+  },
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+ultraxas",
+      "url": "/?handler=%s"
     }
   ]
 }

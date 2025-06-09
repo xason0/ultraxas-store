@@ -4,6 +4,24 @@ const STATIC_CACHE = "ultraxas-static-v4"
 const DYNAMIC_CACHE = "ultraxas-dynamic-v4"
 const APK_CACHE = "ultraxas-apk-v4"
 
+// Force install prompt to show
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting()
+  }
+
+  if (event.data && event.data.type === "FORCE_INSTALL_PROMPT") {
+    // Notify all clients to show install prompt
+    self.clients.matchAll().then((clients) => {
+      clients.forEach((client) => {
+        client.postMessage({
+          type: "SHOW_INSTALL_PROMPT",
+        })
+      })
+    })
+  }
+})
+
 // Assets to cache immediately for offline functionality
 const STATIC_ASSETS = [
   "/",
@@ -15,9 +33,12 @@ const STATIC_ASSETS = [
   "/android-chrome-512x512.png",
 ]
 
-// Install event - cache static assets
+// Enhanced install event
 self.addEventListener("install", (event) => {
-  console.log("🔧 Service Worker: Installing with 1TB storage support...")
+  console.log("🔧 Service Worker: Installing with enhanced PWA support...")
+
+  // Skip waiting to activate immediately
+  self.skipWaiting()
 
   event.waitUntil(
     caches
@@ -27,8 +48,18 @@ self.addEventListener("install", (event) => {
         return cache.addAll(STATIC_ASSETS)
       })
       .then(() => {
-        console.log("✅ Service Worker: Installation complete with enhanced storage")
-        return self.skipWaiting()
+        console.log("✅ Service Worker: Installation complete")
+
+        // Notify clients about successful installation
+        return self.clients.matchAll()
+      })
+      .then((clients) => {
+        clients.forEach((client) => {
+          client.postMessage({
+            type: "SW_INSTALLED",
+            message: "Service Worker installed successfully",
+          })
+        })
       })
       .catch((error) => {
         console.error("❌ Service Worker: Installation failed", error)

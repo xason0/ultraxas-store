@@ -26,26 +26,22 @@ export async function addApp(app: App, apkFile?: File): Promise<void> {
 }
 
 // New saveApp function for upload page
-export async function saveApp(app: App, apkFile?: File): Promise<void> {
+export async function saveApp(app: App, apkFile: File): Promise<void> {
   try {
-    // Track the upload in analytics
-    trackUpload(app)
+    // Get existing apps
+    const existingApps = await getAllApps()
 
-    // Save using enhanced storage with permanent file storage
-    await enhancedStorage.addApp(app, apkFile)
+    // Add new app
+    existingApps.push(app)
 
-    // Also save to localStorage for immediate access
-    const apps = getApps()
-    apps.push(app)
-    localStorage.setItem("ultraxas_apps", JSON.stringify(apps))
+    // Save to localStorage
+    localStorage.setItem("ultraxas_apps", JSON.stringify(existingApps))
 
-    console.log(`✅ App "${app.name}" saved permanently with 1TB storage capacity`)
+    console.log(`✅ App "${app.name}" saved successfully`)
+    return Promise.resolve()
   } catch (error) {
-    console.error("Failed to save app:", error)
-    // Fallback to localStorage only
-    const apps = getApps()
-    apps.push(app)
-    localStorage.setItem("ultraxas_apps", JSON.stringify(apps))
+    console.error("Error saving app:", error)
+    return Promise.reject(new Error("Failed to save app"))
   }
 }
 
@@ -64,15 +60,23 @@ export function updateApp(id: string, updates: Partial<App>): void {
   }
 }
 
-export function deleteApp(id: string): void {
-  if (typeof window === "undefined") return
-
+// Delete app from storage
+export async function deleteApp(appId: string): Promise<void> {
   try {
-    const apps = getApps()
-    const filtered = apps.filter((app) => app.id !== id)
-    localStorage.setItem("ultraxas_apps", JSON.stringify(filtered))
+    // Get existing apps
+    const existingApps = await getAllApps()
+
+    // Filter out the app to delete
+    const updatedApps = existingApps.filter((app) => app.id !== appId)
+
+    // Save updated list to localStorage
+    localStorage.setItem("ultraxas_apps", JSON.stringify(updatedApps))
+
+    console.log(`✅ App with ID "${appId}" deleted successfully`)
+    return Promise.resolve()
   } catch (error) {
-    console.error("Failed to delete app:", error)
+    console.error("Error deleting app:", error)
+    return Promise.reject(new Error("Failed to delete app"))
   }
 }
 
@@ -137,6 +141,7 @@ export async function clearStorage(): Promise<void> {
   }
 }
 
+// Add the missing backupData function
 export async function backupData(): Promise<string> {
   if (typeof window === "undefined") return ""
 
@@ -179,6 +184,7 @@ export async function backupData(): Promise<string> {
   }
 }
 
+// Add the missing restoreData function
 export async function restoreData(file: File): Promise<void> {
   if (typeof window === "undefined") return
 
@@ -440,4 +446,30 @@ export async function createDataBackup(): Promise<string> {
 
 export async function restoreDataBackup(backupData: string): Promise<void> {
   return await enhancedStorage.restoreFromBackup(backupData)
+}
+
+// Get all apps from storage
+export async function getAllApps(): Promise<App[]> {
+  try {
+    const appsJson = localStorage.getItem("ultraxas_apps")
+    if (!appsJson) {
+      return []
+    }
+
+    return JSON.parse(appsJson)
+  } catch (error) {
+    console.error("Error getting apps:", error)
+    return []
+  }
+}
+
+// Get app by ID
+export async function getAppById(appId: string): Promise<App | null> {
+  try {
+    const apps = await getAllApps()
+    return apps.find((app) => app.id === appId) || null
+  } catch (error) {
+    console.error("Error getting app by ID:", error)
+    return null
+  }
 }

@@ -1,4 +1,3 @@
-import type React from "react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -20,7 +19,7 @@ interface AppGridProps {
   isLoading?: boolean
 }
 
-const AppGrid: React.FC<AppGridProps> = ({ apps, isLoading }) => {
+export function AppGrid({ apps, isLoading }: AppGridProps) {
   return (
     <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {isLoading ? (
@@ -91,4 +90,5 @@ const AppGrid: React.FC<AppGridProps> = ({ apps, isLoading }) => {
   )
 }
 
+// Export both named and default for compatibility
 export default AppGrid

@@ -8,6 +8,7 @@ import StoreHeader from "@/components/store-header"
 import { Chatbot } from "@/components/chatbot"
 import { BuyMeCoffee } from "@/components/buy-me-coffee"
 import { Toaster } from "@/components/ui/toaster"
+import { PlayStoreInstallPrompt } from "@/components/play-store-install-prompt"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
     title: "UltraXas Store",
     description: "Private app store for UltraXas Dev team",
   },
-    generator: 'v0.dev'
+  generator: "v0.dev",
 }
 
 export default function RootLayout({
@@ -197,6 +198,7 @@ export default function RootLayout({
           <BottomNavigation />
           <Chatbot />
           <BuyMeCoffee />
+          <PlayStoreInstallPrompt />
           <Toaster />
         </ThemeProvider>
       </body>

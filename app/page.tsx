@@ -11,16 +11,28 @@ import { ConsentModal } from "@/components/consent-modal"
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("")
   const [apps, setApps] = useState<App[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    setApps(getApps())
+    try {
+      const appsData = getApps()
+      // Ensure we always have an array
+      setApps(Array.isArray(appsData) ? appsData : [])
+    } catch (error) {
+      console.error("Error loading apps:", error)
+      setApps([])
+    } finally {
+      setLoading(false)
+    }
   }, [])
 
-  const filteredApps = apps.filter(
-    (app) =>
-      app.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      app.description.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
+  const filteredApps = Array.isArray(apps)
+    ? apps.filter(
+        (app) =>
+          app.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          app.description.toLowerCase().includes(searchQuery.toLowerCase()),
+      )
+    : []
 
   return (
     <div className="container max-w-lg mx-auto px-3 sm:px-4 py-4 sm:py-6">
@@ -54,14 +66,23 @@ export default function Home() {
         {searchQuery ? `Search Results (${filteredApps.length})` : "Your Apps"}
       </h2>
 
-      <AppGrid apps={filteredApps.length > 0 ? filteredApps : apps} />
-
-      {apps.length === 0 && (
+      {loading ? (
         <div className="text-center py-12">
-          <div className="text-6xl mb-4">📱</div>
-          <p className="text-muted-foreground text-lg mb-2">No apps available yet</p>
-          <p className="text-sm text-muted-foreground">Upload your first app using the Upload tab below!</p>
+          <div className="text-6xl mb-4">⏳</div>
+          <p className="text-muted-foreground text-lg">Loading apps...</p>
         </div>
+      ) : (
+        <>
+          <AppGrid apps={filteredApps.length > 0 ? filteredApps : apps} />
+
+          {apps.length === 0 && (
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4">📱</div>
+              <p className="text-muted-foreground text-lg mb-2">No apps available yet</p>
+              <p className="text-sm text-muted-foreground">Upload your first app using the Upload tab below!</p>
+            </div>
+          )}
+        </>
       )}
 
       {/* Add the ConsentModal component here */}

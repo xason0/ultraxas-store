@@ -1,0 +1,60 @@
+[
+  {
+    "id": "ultratube",
+    "name": "UltraTube",
+    "description": "Download YouTube videos easily with high quality options",
+    "version": "1.0.3",
+    "image": "/apps/ultratube/icon.png",
+    "apk": "/apps/ultratube/ultratube.apk",
+    "category": "Downloader",
+    "video": "/apps/ultratube/demo.mp4",
+    "size": "12.5 MB",
+    "downloads": "1.2K",
+    "rating": 4.8,
+    "developer": "UltraXas Team",
+    "lastUpdated": "2024-12-15"
+  },
+  {
+    "id": "ultrabot",
+    "name": "UltraBot",
+    "description": "AI-powered chatbot assistant for daily tasks",
+    "version": "2.1.0",
+    "image": "/apps/ultrabot/icon.png",
+    "apk": "/apps/ultrabot/ultrabot.apk",
+    "category": "Chatbots",
+    "size": "8.3 MB",
+    "downloads": "850",
+    "rating": 4.6,
+    "developer": "UltraXas Team",
+    "lastUpdated": "2024-12-10"
+  },
+  {
+    "id": "ultragame",
+    "name": "UltraGame",
+    "description": "Retro-style puzzle game with modern graphics",
+    "version": "1.5.2",
+    "image": "/apps/ultragame/icon.png",
+    "apk": "/apps/ultragame/ultragame.apk",
+    "category": "Games",
+    "video": "/apps/ultragame/gameplay.mp4",
+    "size": "45.2 MB",
+    "downloads": "2.1K",
+    "rating": 4.9,
+    "developer": "UltraXas Team",
+    "lastUpdated": "2024-12-08"
+  },
+  {
+    "id": "ultratools",
+    "name": "UltraTools",
+    "description": "Essential utility tools for Android devices",
+    "version": "3.0.1",
+    "image": "/apps/ultratools/icon.png",
+    "apk": "/apps/ultratools/ultratools.apk",
+    "category": "Tools",
+    "size": "6.7 MB",
+    "downloads": "3.5K",
+    "rating": 4.7,
+    "developer": "UltraXas Team",
+    "lastUpdated": "2024-12-12"
+  }
+]
