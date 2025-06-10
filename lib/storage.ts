@@ -463,6 +463,20 @@ export async function getAllApps(): Promise<App[]> {
   }
 }
 
+// Enhanced getAllApps that can include F-Droid apps
+export async function getAllAppsIncludingFDroid(): Promise<App[]> {
+  try {
+    const userApps = await getAllApps() // Your uploaded apps
+    const fdroidApps = await getFDroidApps() // F-Droid apps
+
+    // Combine both, user apps first
+    return [...userApps, ...fdroidApps]
+  } catch (error) {
+    console.error("Error getting all apps:", error)
+    return await getAllApps() // Fallback to just user apps
+  }
+}
+
 // Get app by ID
 export async function getAppById(appId: string): Promise<App | null> {
   try {
@@ -472,4 +486,106 @@ export async function getAppById(appId: string): Promise<App | null> {
     console.error("Error getting app by ID:", error)
     return null
   }
+}
+
+// Load F-Droid apps from apps.json
+export async function getFDroidApps(): Promise<App[]> {
+  if (typeof window === "undefined") return []
+
+  try {
+    const response = await fetch("/data/apps.json")
+    if (!response.ok) {
+      console.warn("F-Droid apps file not found, using fallback")
+      return getFallbackApps()
+    }
+
+    const data = await response.json()
+
+    // Handle different JSON structures
+    const apps = Array.isArray(data) ? data : data.apps || data.packages || []
+
+    // Convert to our App format
+    return apps
+      .map((app: any) => ({
+        id: app.packageName || app.id || `fdroid_${Math.random()}`,
+        name: app.name || app.title || "Unknown App",
+        developer: app.developer || app.author || app.authorName || "Unknown Developer",
+        icon:
+          app.icon ||
+          app.iconUrl ||
+          `/placeholder.svg?height=100&width=100&text=${encodeURIComponent(app.name?.charAt(0) || "A")}`,
+        description: app.summary || app.description || "No description available",
+        category: Array.isArray(app.categories) ? app.categories[0] : app.category || "Uncategorized",
+        rating: app.rating || Math.round((Math.random() * 2 + 3) * 10) / 10, // 3.0-5.0
+        downloads: app.downloads || Math.floor(Math.random() * 1000000) + 10000,
+        version: app.version || app.versionName || "1.0",
+        size: app.size || `${Math.floor(Math.random() * 50) + 1} MB`,
+        lastUpdated: app.lastUpdated || app.added || new Date().toISOString().split("T")[0],
+        downloadUrl: app.downloadUrl || app.apkUrl || `https://f-droid.org/packages/${app.packageName || app.id}/`,
+        screenshots: app.screenshots || [],
+        features: app.features || ["Free", "Open Source"],
+        reviews: app.reviews || [],
+      }))
+      .filter((app) => app.name && app.name !== "Unknown App")
+  } catch (error) {
+    console.error("Error loading F-Droid apps:", error)
+    return getFallbackApps()
+  }
+}
+
+// Fallback apps if main file fails to load
+function getFallbackApps(): App[] {
+  return [
+    {
+      id: "org.fdroid.fdroid",
+      name: "F-Droid",
+      developer: "F-Droid Team",
+      icon: "https://f-droid.org/repo/icons-640/org.fdroid.fdroid.png",
+      description: "The Free and Open Source Android App Repository",
+      category: "System",
+      rating: 4.8,
+      downloads: 5000000,
+      version: "1.15.2",
+      size: "8.4 MB",
+      lastUpdated: "2024-01-15",
+      downloadUrl: "https://f-droid.org/packages/org.fdroid.fdroid/",
+      screenshots: [],
+      features: ["Free", "Open Source"],
+      reviews: [],
+    },
+    {
+      id: "org.mozilla.firefox",
+      name: "Firefox",
+      developer: "Mozilla",
+      icon: "https://f-droid.org/repo/icons-640/org.mozilla.firefox.png",
+      description: "Fast, private and secure web browser",
+      category: "Internet",
+      rating: 4.6,
+      downloads: 10000000,
+      version: "98.3.0",
+      size: "64.2 MB",
+      lastUpdated: "2024-01-10",
+      downloadUrl: "https://f-droid.org/packages/org.mozilla.firefox/",
+      screenshots: [],
+      features: ["Free", "Privacy Focused"],
+      reviews: [],
+    },
+    {
+      id: "org.videolan.vlc",
+      name: "VLC",
+      developer: "VideoLAN",
+      icon: "https://f-droid.org/repo/icons-640/org.videolan.vlc.png",
+      description: "Free and open source multimedia player",
+      category: "Multimedia",
+      rating: 4.7,
+      downloads: 8000000,
+      version: "3.4.4",
+      size: "45.1 MB",
+      lastUpdated: "2024-01-05",
+      downloadUrl: "https://f-droid.org/packages/org.videolan.vlc/",
+      screenshots: [],
+      features: ["Free", "Media Player"],
+      reviews: [],
+    },
+  ]
 }

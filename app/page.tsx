@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import AppGrid from "@/components/app-grid"
-import { getApps } from "@/lib/storage"
+import { getApps, getFDroidApps } from "@/lib/storage"
 import type { App } from "@/lib/types"
 import { ConsentModal } from "@/components/consent-modal"
 
@@ -12,6 +12,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("")
   const [apps, setApps] = useState<App[]>([])
   const [loading, setLoading] = useState(true)
+  const [fdroidCount, setFdroidCount] = useState(0)
 
   useEffect(() => {
     try {
@@ -24,6 +25,18 @@ export default function Home() {
     } finally {
       setLoading(false)
     }
+  }, [])
+
+  useEffect(() => {
+    async function loadFDroidCount() {
+      try {
+        const fdroidApps = await getFDroidApps()
+        setFdroidCount(fdroidApps.length)
+      } catch (error) {
+        console.error("Error loading F-Droid count:", error)
+      }
+    }
+    loadFDroidCount()
   }, [])
 
   const filteredApps = Array.isArray(apps)
@@ -50,6 +63,11 @@ export default function Home() {
         </div>
         <p className="text-sm sm:text-base text-muted-foreground mb-3 sm:mb-4">
           Private app store for the UltraXas Dev team
+          {fdroidCount > 0 && (
+            <span className="block text-xs text-green-600 mt-1">
+              + {fdroidCount.toLocaleString()} open source apps available
+            </span>
+          )}
         </p>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
